@@ -1,4 +1,6 @@
 using System.Collections;
+using TMPro;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,10 +21,23 @@ public class PlayerController : MonoBehaviour
 
     private float horizontalInput;
 
+    // for jumping
+
+    [SerializeField] private LayerMask groundLayer;
+
+    [SerializeField] private LayerMask wallLayer;
+
     // for dashing
+    private bool canDash = true;
     private bool isDashing;
-    private float doubleTapTime;
-    KeyCode lastKeyCode;
+
+    [SerializeField] private float dashingPower = 24f;
+
+    private float dashingTime = 0.2f;
+
+    private float dashingCooldown = 1f;
+
+    [SerializeField] private TrailRenderer tr;
 
 
     // Called each time an instance is loaded
@@ -36,6 +51,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (isDashing)
+        {
+            return;
+        }
+
         horizontalInput = Input.GetAxis("Horizontal");
         //ratRigidBody.linearVelocity = new Vector2(horizontalInput * speed, ratRigidBody.linearVelocity.y);
 
@@ -44,9 +65,9 @@ public class PlayerController : MonoBehaviour
         //     ratRigidBody.linearVelocity = new Vector2(ratRigidBody.linearVelocity.x, speed);
         // }
 
+        // Wall Jump Logic
         if (wallJumpCoolDown > 0.2f)
         {
-            
 
             ratRigidBody.linearVelocity = new Vector2(horizontalInput * speed, ratRigidBody.linearVelocity.y);
 
@@ -56,49 +77,38 @@ public class PlayerController : MonoBehaviour
                 ratRigidBody.linearVelocity = Vector2.zero;
             }
             else
-                ratRigidBody.gravityScale = 20;
+                ratRigidBody.gravityScale = 10;
 
-                if(Input.GetKey(KeyCode.Space) && isGrounded())
-                {
-                    Jump();
-                }
+            if(Input.GetKey(KeyCode.Space))
+            {
+                Jump();
+            }
 
         }
         else
             wallJumpCoolDown += Time.deltaTime;
 
 
-        // Dashing left
-        if (Input.GetKeyDown(KeyCode.A))
+        // Dashing logic
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
-            if (doubleTapTime > Time.time && lastKeyCode == KeyCode.A)
-            {
-                StartCoroutine(Dash(-1f));
-            }
-            else
-            {
-                doubleTapTime = Time.time + 0.5f;
-            }
-            lastKeyCode = KeyCode.A;
+            StartCoroutine(Dash());
         }
-
-        // Dashing right
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (doubleTapTime > Time.time && lastKeyCode == KeyCode.D)
-            {
-                StartCoroutine(Dash(1f));
-            }
-            else
-            {
-                doubleTapTime = Time.time + 0.5f;
-            }
-            lastKeyCode = KeyCode.D;
-        }
+        
 
 
         // Debugging Statements
-        print(onWall());
+        //print(onWall());
+        //print(isGrounded());
+    }
+
+    private void FixedUpdate()
+    {
+        if (isDashing)
+        {
+            return;
+        }
+        ratRigidBody.linearVelocity = new Vector2(horizontalInput * speed, ratRigidBody.linearVelocity.y);
     }
 
     private void Jump()
@@ -124,25 +134,35 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    IEnumerator Dash (float direction)
+    private IEnumerator Dash()
     {
+        canDash = false;
         isDashing = true;
-        ratRigidBody.linearVelocity = new Vector2(ratRigidBody.linearVelocity.x, 0f);
-        ratRigidBody.AddForce(new Vector2(dashDistance * direction, 0f), ForceMode2D.Impulse);
-        float gravity = ratRigidBody.gravityScale;
-        ratRigidBody.gravityScale = 0;
-        yield return new WaitForSeconds(0.4f);
-        
-
-        // End dashing
+        float originalGravity = ratRigidBody.gravityScale;
+        ratRigidBody.gravityScale = 0f;
+        if (ratRigidBody.linearVelocityX < 0)
+        {
+            ratRigidBody.linearVelocity = new Vector2(-transform.localScale.x * dashingPower, 0f);
+        }
+        else
+        {
+            ratRigidBody.linearVelocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        }
+    
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        ratRigidBody.gravityScale = originalGravity;
         isDashing = false;
-        ratRigidBody.gravityScale = gravity;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
     }
 
     private bool isGrounded()
     {
         // can add layer mask if need be
-        RaycastHit2D raycastHit = Physics2D.BoxCast(circleCollider.bounds.center, circleCollider.bounds.size, 0, Vector2.down, 0.1f);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(circleCollider.bounds.center, circleCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        //Debug.Log(raycastHit.collider.gameObject);
         return raycastHit.collider != null;
 
     }
@@ -151,7 +171,7 @@ public class PlayerController : MonoBehaviour
     private bool onWall()
     {
         // can add layer mask if need be
-         RaycastHit2D raycastHit = Physics2D.BoxCast(circleCollider.bounds.center, circleCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f);
+         RaycastHit2D raycastHit = Physics2D.BoxCast(circleCollider.bounds.center, circleCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
          return raycastHit.collider != null;
     }
 }

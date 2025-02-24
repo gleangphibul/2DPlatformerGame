@@ -5,8 +5,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     
-    public enum InteractionType { NONE, PickUp, Examine}
+    public enum InteractionType { NONE, PickUp, Chest, Enemy}
     public InteractionType type;
+    public Sprite image;
 
     private void Reset()
     {
@@ -20,13 +21,19 @@ public class Item : MonoBehaviour
         switch(type)
         {
             case InteractionType.PickUp:
-                Debug.Log("PICK UP");
+                // Add the object to the PickedUpItems list
+                Object.FindAnyObjectByType<InteractionSystem>().PickUpItem(gameObject);
+                // Disable the object
+                gameObject.SetActive(false);
                 break;
-            case InteractionType.Examine:
-                // Display an Examine Window
-                // Show the item's image in the middle
-                // Write description text underneath the image
-                Debug.Log("EXAMINE");
+            case InteractionType.Chest:
+                // Destroy the chest
+                // Create a key object
+                Object.FindAnyObjectByType<InteractionSystem>().OpenChest(gameObject);
+                break;
+
+            case InteractionType.Enemy:
+                Debug.Log("Enemy");
                 break;
             default:
                 Debug.Log("NULL ITEM");

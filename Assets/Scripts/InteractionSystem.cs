@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractionSystem : MonoBehaviour
 {
+
+   [Header("Detection Parameters")]
    // Detection point
    public Transform detectionPoint;
    // Detection radius
@@ -11,6 +15,20 @@ public class InteractionSystem : MonoBehaviour
 
    // Cached Trigger Object
    public GameObject detectedObject;
+
+   [Header("Pickup-able Items")]
+
+   // List of picked items
+   public List<GameObject> pickedItems = new List<GameObject>();
+
+   [Header("For Chest Interactions")]
+
+   public GameObject key;
+
+//    [Header("For Enemy interaction")]
+
+//    public GameObject enemy;
+
 
     // Update is called once per frame
     void Update()
@@ -49,4 +67,26 @@ public class InteractionSystem : MonoBehaviour
      Gizmos.color = Color.green;
      Gizmos.DrawSphere(detectionPoint.position, detectionRadius);   
     }
+
+    public void PickUpItem(GameObject item)
+    {
+        pickedItems.Add(item);
+        Debug.Log("Item picked up");
+    }
+
+    public void OpenChest(GameObject item)
+    {
+        Destroy(item);
+        Debug.Log("Chest destroyed");
+        Instantiate<GameObject>(key, transform.position, Quaternion.identity);
+        Debug.Log("Key created");
+    }
+
+    public void AttackEnemy(GameObject enemy)
+    {
+        // Insert combat code here
+    }
+
+    
+
 }

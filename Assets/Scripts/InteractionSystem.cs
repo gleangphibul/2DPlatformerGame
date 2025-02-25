@@ -25,6 +25,8 @@ public class InteractionSystem : MonoBehaviour
 
    public GameObject key;
 
+   bool hasKey;
+
 //    [Header("For Enemy interaction")]
 
 //    public GameObject enemy;
@@ -72,6 +74,14 @@ public class InteractionSystem : MonoBehaviour
     {
         pickedItems.Add(item);
         Debug.Log("Item picked up");
+
+        if (key != null)
+        {
+            hasKey = true;
+            Debug.Log("Picked up the key");
+        }
+
+        print(hasKey);
     }
 
     public void OpenChest(GameObject item)

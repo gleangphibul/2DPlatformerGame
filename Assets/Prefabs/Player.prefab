@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 1277235565207731083}
   - component: {fileID: 6947454549756556247}
   - component: {fileID: 5745424579568290985}
-  - component: {fileID: 6784447078040491316}
   - component: {fileID: -142194311710087398}
+  - component: {fileID: 6015003608337641742}
+  - component: {fileID: 3151655335762916894}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5661608288282898014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.04, y: -2.55, z: 0}
+  m_LocalPosition: {x: -10.37, y: -2.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -117,7 +118,56 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &6784447078040491316
+--- !u!114 &-142194311710087398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5661608288282898014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64a43c95fd2d6a4d9c525aab5dda1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  jumpForce: 3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  dashingPower: 5
+  tr: {fileID: 0}
+  spriteLeft: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  spriteLeftAlt: {fileID: 7085597507905639842, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  spriteRight: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  spriteRightAlt: {fileID: 7085597507905639842, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  animationSwitchTime: 0.1
+  attackSprite1: {fileID: 3096850651442554691, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  attackSprite2: {fileID: 4123603183123714085, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  attackSprite3: {fileID: 520556416462525903, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  attackSprite4: {fileID: -580482337852342584, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
+  fallLimit: -5
+  attackRange: 1
+  breakableLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &6015003608337641742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5661608288282898014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72b20977d57e4f46b40a79d815c1b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRigidbody: {fileID: 5745424579568290985}
+--- !u!61 &3151655335762916894
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,24 +213,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.6, y: 0.96666664}
   m_EdgeRadius: 0
---- !u!114 &-142194311710087398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5661608288282898014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64a43c95fd2d6a4d9c525aab5dda1ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  jumpForce: 50
-  spriteLeft: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
-  spriteLeftAlt: {fileID: 7085597507905639842, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
-  spriteRight: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
-  spriteRightAlt: {fileID: 7085597507905639842, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
-  playerSpriteRenderer: {fileID: 0}
-  animationSwitchTime: 0.1
-  fallLimit: -5

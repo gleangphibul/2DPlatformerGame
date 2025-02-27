@@ -54,6 +54,11 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 1f;
     public LayerMask breakableLayer;
 
+    [Header ("Open Gate")]
+    private bool hasKey = false;
+    public Gate gate; 
+    
+
     private void Awake()
     {
         playerRigidBody = GetComponent<Rigidbody2D>();
@@ -79,6 +84,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking)
         {
             StartAttack();
+        }
+
+        if (hasKey && Input.GetKeyDown(KeyCode.Space))
+        {
+            gate.OpenGate();
         }
     }
 
@@ -256,6 +266,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void AddKey()
+    {
+        hasKey = true;
+        Debug.Log("Key collected!");
+    }
+
+    public void RemoveKey()
+    {
+        hasKey = false;
+        Debug.Log("Key used!");
+    }
 
     private void ReloadScene()
     {

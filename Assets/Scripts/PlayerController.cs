@@ -1,69 +1,230 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5;
-    public float jumpForce = 50;
-    private Rigidbody2D playerRigidbody;
+    private Rigidbody2D playerRigidBody;
+    private BoxCollider2D boxCollider;
 
-    [Header("Animation")]
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
+    private float wallJumpCoolDown;
+    private float horizontalInput;
 
+    private bool canDoubleJump;
+    
+    [Header("Jumping")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+
+    [Header("Dashing")]
+    private bool canDash = true;
+    private bool isDashing;
+    [SerializeField] private float dashingPower = 24f;
+    private float dashingTime = 0.2f;
+    private float dashingCooldown = 1f;
+    [SerializeField] private TrailRenderer tr;
+
+    [Header("Move Animation")]
     public Sprite spriteLeft;
     public Sprite spriteLeftAlt;
     public Sprite spriteRight;
     public Sprite spriteRightAlt;
+    private SpriteRenderer playerSpriteRenderer;
 
-    public SpriteRenderer playerSpriteRenderer;
+    private float animationTimer = 0f;
+    public float animationSwitchTime = 0.1f;
+    private bool useAlternateSprite = false;
 
-    private float animationTimer = 0f; // Timer to control animation switching
-    public float animationSwitchTime = 0.1f; // Time between sprite changes
-    private bool useAlternateSprite = false; // Track whether to use the alternate sprite
+    [Header("Attack Animation")]
+    public Sprite attackSprite1;
+    public Sprite attackSprite2;
+    public Sprite attackSprite3;
+    public Sprite attackSprite4;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
+    private int attackFrame = 0;
 
+
+    [Header("Reload Scene")]
     public float fallLimit = -5;
+
+    [Header("Attack")]
+    public float attackRange = 1f;
+    public LayerMask breakableLayer;
+
+    private void Awake()
+    {
+        playerRigidBody = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        // Ensure the player respawns if they fall off
+        if (transform.position.y < fallLimit)
+        {
+            ReloadScene();
+        }
+
+        Move();
+
+        // if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        // {
+        //     StartCoroutine(Dash());
+        // }
+
+        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking)
+        {
+            StartAttack();
+        }
+    }
 
     private void Move()
     {
-        float moveHorizontal = 0f;
-        float moveVertical = playerRigidbody.linearVelocity.y; // Keep vertical velocity constant (affected by gravity)
+        if (isDashing) return; // Stop overriding velocity if dashing
 
-        if (Input.GetKey(KeyCode.LeftArrow)) // Move left
+        horizontalInput = Input.GetAxis("Horizontal");
+
+        if (wallJumpCoolDown > 0.2f)
         {
-            moveHorizontal = -1f;
+            playerRigidBody.linearVelocity = new Vector2(horizontalInput * speed, playerRigidBody.linearVelocity.y);
+
+            if (onWall() && !isGrounded())
+            {
+                playerRigidBody.gravityScale = 0;
+                playerRigidBody.linearVelocity = Vector2.zero;
+            }
+            else
+            {
+                playerRigidBody.gravityScale = 10;
+            }
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Jump();
+            }
         }
-        else if (Input.GetKey(KeyCode.RightArrow)) // Move right
+        else
         {
-            moveHorizontal = 1f;
+            wallJumpCoolDown += Time.deltaTime;
         }
 
-        // Apply movement based on horizontal input
-        playerRigidbody.linearVelocity = new Vector2(moveHorizontal * speed, moveVertical);
+        AnimatePlayerSprite();
+    }
 
-        // Handle jumping
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+
+    private void Jump()
+    {
+        if (isGrounded())
         {
-            playerRigidbody.linearVelocity = new Vector2(playerRigidbody.linearVelocity.x, jumpForce); // Apply jump force
+            playerRigidBody.linearVelocity = new Vector2(playerRigidBody.linearVelocity.x, jumpForce);
+            canDoubleJump = true; // Reset double jump when touching the ground
         }
+        else if (canDoubleJump)
+        {
+            playerRigidBody.linearVelocity = new Vector2(playerRigidBody.linearVelocity.x, jumpForce);
+            canDoubleJump = false;
+        }
+        else if (onWall() && !isGrounded())
+        {
+            if (horizontalInput == 0)
+            {
+                playerRigidBody.linearVelocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
+                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
+            else
+            {
+                playerRigidBody.linearVelocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
+            }
+            wallJumpCoolDown = 0;
+        }
+    }
+
+    // private IEnumerator Dash()
+    // {
+    //     canDash = false;
+    //     isDashing = true;
+    //     float originalGravity = playerRigidBody.gravityScale;
+    //     playerRigidBody.gravityScale = 0; // Disable gravity during dash
+
+    //     float dashDirection = (horizontalInput != 0) ? Mathf.Sign(horizontalInput) : Mathf.Sign(transform.localScale.x);
+    //     playerRigidBody.linearVelocity = new Vector2(dashDirection * dashingPower, 0); // Keep Y velocity constant
+
+    //     tr.emitting = true;
+    //     yield return new WaitForSeconds(dashingTime);
+    //     tr.emitting = false;
+
+    //     isDashing = false;
+    //     playerRigidBody.gravityScale = originalGravity; // Restore gravity
+    //     yield return new WaitForSeconds(dashingCooldown);
+    //     canDash = true;
+    // }
+
+
+    private bool isGrounded()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        return raycastHit.collider != null;
+    }
+
+    private bool onWall()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        return raycastHit.collider != null;
     }
 
     private void AnimatePlayerSprite()
     {
-        // Update the animation timer
         animationTimer += Time.deltaTime;
 
-        // Switch sprite every animationSwitchTime seconds
-        if (animationTimer >= animationSwitchTime)
+        if (isAttacking)
         {
-            animationTimer = 0f; // Reset timer
-            useAlternateSprite = !useAlternateSprite; // Toggle sprite state
+            attackTimer += Time.deltaTime;
+
+            if (attackTimer >= animationSwitchTime)
+            {
+                attackTimer = 0f;
+                attackFrame++;
+
+                switch (attackFrame)
+                {
+                    case 1:
+                        playerSpriteRenderer.sprite = attackSprite1;
+                        break;
+                    case 2:
+                        playerSpriteRenderer.sprite = attackSprite2;
+                        break;
+                    case 3:
+                        playerSpriteRenderer.sprite = attackSprite3;
+                        break;
+                    case 4:
+                        playerSpriteRenderer.sprite = attackSprite4;
+                        Attack(); // Call attack function when last frame is reached
+                        break;
+                    default:
+                        isAttacking = false; // End attack animation
+                        break;
+                }
+            }
+            return; // Prevent movement animation while attacking
         }
 
-        // Determine which sprite to display based on movement direction
-        if (playerRigidbody.linearVelocity.x > 0) // Moving right
+        // Movement animation
+        if (animationTimer >= animationSwitchTime)
+        {
+            animationTimer = 0f;
+            useAlternateSprite = !useAlternateSprite;
+        }
+
+        if (playerRigidBody.linearVelocity.x > 0)
         {
             playerSpriteRenderer.sprite = useAlternateSprite ? spriteRightAlt : spriteRight;
             playerSpriteRenderer.flipX = false;
         }
-        else if (playerRigidbody.linearVelocity.x < 0) // Moving left
+        else if (playerRigidBody.linearVelocity.x < 0)
         {
             playerSpriteRenderer.sprite = useAlternateSprite ? spriteLeftAlt : spriteLeft;
             playerSpriteRenderer.flipX = true;
@@ -71,34 +232,33 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void ReloadScene(){
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    private void StartAttack()
+    {
+        if (isAttacking) return; // Prevent spamming attacks
+
+        isAttacking = true;
+        attackTimer = 0f;
+        attackFrame = 0;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision){
-        if (collision.gameObject.CompareTag("Water")){
-            ReloadScene();
+    private void Attack()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, attackRange, breakableLayer);
+
+        if (hit.collider != null)
+        {
+            BreakableBox breakable = hit.collider.GetComponent<BreakableBox>();
+            if (breakable != null)
+            {
+                breakable.TakeHit();
+            }
         }
     }
 
 
-    // Start is called before the first frame update
-    void Start()
+    private void ReloadScene()
     {
-        playerRigidbody = GetComponent<Rigidbody2D>();
-        playerSpriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Move();
-        AnimatePlayerSprite();
-
-        if (transform.position.y < fallLimit) {
-            ReloadScene();
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
-
-    

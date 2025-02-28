@@ -7,15 +7,25 @@ public class Portal : MonoBehaviour
     [SerializeField] private string nextSceneName;
     [SerializeField] private GameObject winText; // Assign in Inspector
 
+    // Portal audio sound
+    private AudioSource portalAudioSource;
+
+    private void Start()
+    {
+        portalAudioSource = GetComponent<AudioSource>();   
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            portalAudioSource.Play();
             Debug.Log("Player entered the portal!");
 
             if (!string.IsNullOrEmpty(nextSceneName))
             {
                 LoadNextLevel();
+
             }
             else
             {

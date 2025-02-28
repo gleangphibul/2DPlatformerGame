@@ -2,37 +2,37 @@ using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
-    private bool playerIsNear = false; // Track if the player is close
+    public bool isNearGate = false; // Track if the player is near the gate
+    private BoxCollider2D gateCollider;
+    private SpriteRenderer spriteRenderer;
 
-    void OnTriggerEnter(Collider other)
+    void Start()
     {
-        if (other.CompareTag("Player")) // Ensure the player has the correct tag
-        {
-            playerIsNear = true;
-            Debug.Log("Player is near the gate.");
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerIsNear = false;
-            Debug.Log("Player left the gate.");
-        }
+        gateCollider = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>(); // Optional: Hide gate on opening
     }
 
     void Update()
     {
-        if (playerIsNear && Input.GetKeyDown(KeyCode.Space)) // Open only if near and space is pressed
+        if (isNearGate && Input.GetKeyDown(KeyCode.Space))
         {
             OpenGate();
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Player reached the gate! Press Space to open.");
+            isNearGate = true;
+        }
+    }
+
     public void OpenGate()
     {
-        Debug.Log("Gate opened!");
-        gameObject.SetActive(false); // Disable the gate
+        Debug.Log("Gate Opened!");
+        gateCollider.enabled = false; // Disable the collider so player can pass
+        spriteRenderer.enabled = false; // Optional: Hide gate sprite
     }
 }

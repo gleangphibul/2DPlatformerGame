@@ -3,11 +3,12 @@ using UnityEngine.SceneManagement; // Required for scene loading
 
 public class Portal : MonoBehaviour
 {
-    [SerializeField] private string nextSceneName; // Set the next scene name in the Inspector
+    [SerializeField] private string nextSceneName;
+    private BoxCollider2D portalCollider;
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.CompareTag("Player")) // Ensure player enters the portal
+        if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player entered the portal! Loading next level...");
             LoadNextLevel();

@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D playerRigidBody;
-    private BoxCollider2D boxCollider;
+
+    private PolygonCollider2D polygonCollider;
 
     [SerializeField] private float speed;
     [SerializeField] private float jumpForce;
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerRigidBody = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        polygonCollider = GetComponent<PolygonCollider2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -86,7 +87,7 @@ public class PlayerController : MonoBehaviour
             StartAttack();
         }
 
-        if (hasKey && Input.GetKeyDown(KeyCode.Space))
+        if (hasKey && (gate.isNearGate == true) && Input.GetKeyDown(KeyCode.Space))
         {
             gate.OpenGate();
         }
@@ -176,13 +177,13 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded()
     {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(polygonCollider.bounds.center, polygonCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return raycastHit.collider != null;
     }
 
     private bool onWall()
     {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(polygonCollider.bounds.center, polygonCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
         return raycastHit.collider != null;
     }
 
@@ -278,7 +279,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Key used!");
     }
 
-    private void ReloadScene()
+    public void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

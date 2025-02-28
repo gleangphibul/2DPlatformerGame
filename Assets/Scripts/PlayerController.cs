@@ -22,10 +22,9 @@ public class PlayerController : MonoBehaviour
     [Header("Dashing")]
     private bool canDash = true;
     private bool isDashing;
-    [SerializeField] private float dashingPower = 24f;
+    [SerializeField] private float dashingPower = 5f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
-    [SerializeField] private TrailRenderer tr;
 
     [Header("Move Animation")]
     public Sprite spriteLeft;
@@ -56,7 +55,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask breakableLayer;
 
     [Header ("Open Gate")]
-    private bool hasKey = false;
+    public bool hasKey = false;
     public Gate gate; 
     
 
@@ -77,10 +76,10 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        // if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        // {
-        //     StartCoroutine(Dash());
-        // }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+         {
+             StartCoroutine(Dash());
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking)
         {
@@ -154,25 +153,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // private IEnumerator Dash()
-    // {
-    //     canDash = false;
-    //     isDashing = true;
-    //     float originalGravity = playerRigidBody.gravityScale;
-    //     playerRigidBody.gravityScale = 0; // Disable gravity during dash
+    private IEnumerator Dash()
+    {
+         canDash = false;
+         isDashing = true;
+         float originalGravity = playerRigidBody.gravityScale;
+         playerRigidBody.gravityScale = 0; // Disable gravity during dash
 
-    //     float dashDirection = (horizontalInput != 0) ? Mathf.Sign(horizontalInput) : Mathf.Sign(transform.localScale.x);
-    //     playerRigidBody.linearVelocity = new Vector2(dashDirection * dashingPower, 0); // Keep Y velocity constant
+         float dashDirection = (horizontalInput != 0) ? Mathf.Sign(horizontalInput) : Mathf.Sign(transform.localScale.x);
+         playerRigidBody.linearVelocity = new Vector2(dashDirection * dashingPower, 0); // Keep Y velocity constant
 
-    //     tr.emitting = true;
-    //     yield return new WaitForSeconds(dashingTime);
-    //     tr.emitting = false;
+     
+         yield return new WaitForSeconds(dashingTime);
+         
 
-    //     isDashing = false;
-    //     playerRigidBody.gravityScale = originalGravity; // Restore gravity
-    //     yield return new WaitForSeconds(dashingCooldown);
-    //     canDash = true;
-    // }
+         isDashing = false;
+         playerRigidBody.gravityScale = originalGravity; // Restore gravity
+         yield return new WaitForSeconds(dashingCooldown);
+         canDash = true;
+    }
 
 
     private bool isGrounded()
@@ -255,7 +254,13 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * transform.localScale.x, attackRange, breakableLayer);
+        // Determine attack direction based on the player's scale
+        Vector2 attackDirection = playerSpriteRenderer.flipX ? Vector2.left : Vector2.right;
+
+        // Perform the raycast in the correct direction
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDirection, attackRange, breakableLayer);
+
+        Debug.DrawRay(transform.position, attackDirection * attackRange, Color.red, 1f); // Debugging line
 
         if (hit.collider != null)
         {
@@ -266,6 +271,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
 
     public void AddKey()
     {

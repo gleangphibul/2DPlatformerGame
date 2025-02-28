@@ -6,6 +6,8 @@ public class Gate : MonoBehaviour
     private BoxCollider2D gateCollider;
     private SpriteRenderer spriteRenderer;
 
+    public PlayerController player; 
+
     void Start()
     {
         gateCollider = GetComponent<BoxCollider2D>();
@@ -14,10 +16,7 @@ public class Gate : MonoBehaviour
 
     void Update()
     {
-        if (isNearGate && Input.GetKeyDown(KeyCode.Space))
-        {
-            OpenGate();
-        }
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)

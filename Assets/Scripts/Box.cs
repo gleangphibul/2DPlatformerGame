@@ -20,20 +20,25 @@ public class Box : MonoBehaviour
     private void AssignRandomItem() {
         // Get all boxes in the scene
         allBoxes = GameObject.FindGameObjectsWithTag("Box");
-        Box[] boxes = new Box[allBoxes.Length];
-        for (int i = 0; i < allBoxes.Length; i++)
-        {
-            boxes[i] = allBoxes[i].GetComponent<Box>();
+        if (allBoxes.Length == 1) { // Level 0
+            Box box = GetComponent<Box>();
+            box.hiddenObject = keyPrefab;
+        } else {
+            Box[] boxes = new Box[allBoxes.Length];
+            for (int i = 0; i < allBoxes.Length; i++)
+            {
+                boxes[i] = allBoxes[i].GetComponent<Box>();
+            }
+
+            // Randomize box order
+            ShuffleArray(boxes);
+
+            // Assign items
+            boxes[0].hiddenObject = keyPrefab;
+            boxes[1].hiddenObject = swordPrefab;
+            boxes[2].hiddenObject = boxes[2].enemyObject;
+            boxes[3].hiddenObject = boxes[3].enemyObject;
         }
-
-        // Randomize box order
-        ShuffleArray(boxes);
-
-        // Assign items
-        boxes[0].hiddenObject = keyPrefab;
-        boxes[1].hiddenObject = swordPrefab;
-        boxes[2].hiddenObject = boxes[2].enemyObject;
-        boxes[3].hiddenObject = boxes[3].enemyObject;
     }
 
     private void BreakBox()

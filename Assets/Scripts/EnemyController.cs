@@ -38,15 +38,37 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
+    // private void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         // Kill the player
+    //         PlayerController player = other.GetComponent<PlayerController>();
+    //         if (player != null)
+    //         {
+    //             player.ReloadScene();
+    //         }
+    //     }
+    // }
+    private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player"))
         {
-            // Kill the player
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.ReloadScene();
+            // Check if the player is above the enemy
+            if (transform.position.y < (other.transform.position.y-0.5)) {
+                // Kill the enemy
+                Die();
+                // EnemyController enemy = GetComponent<EnemyController>();
+                // if (enemy != null) {
+                //     enemy.Die();
+                // }
+                // Bounce the player up
+                // rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+            } else {
+                // Player dies if they touch the enemy from the side
+                PlayerController player = other.GetComponent<PlayerController>();
+                if (player != null) {
+                    player.ReloadScene();
+                }
             }
         }
     }

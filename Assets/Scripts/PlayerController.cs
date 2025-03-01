@@ -62,8 +62,6 @@ public class PlayerController : MonoBehaviour
 
     [Header ("Sword")]
     public bool hasSword = false;
-    // public Gate gate; 
-    
 
     private void Awake()
     {
@@ -274,10 +272,19 @@ public class PlayerController : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Box breakable = hit.collider.GetComponent<Box>();
-            if (breakable != null)
-            {
-                breakable.TakeHit();
+            GameObject hitObject = hit.collider.gameObject;
+            if (hasSword && hitObject.CompareTag("FinalBoss")) {
+                // Deal damage to the Final Boss
+                EnemyController boss = hitObject.GetComponent<EnemyController>();
+                boss.Die();
+            } else if (hitObject.CompareTag("Enemy")) {
+                EnemyController enemy = hitObject.GetComponent<EnemyController>();
+                enemy.Die();
+            } else {
+                Box breakable = hit.collider.GetComponent<Box>();
+                if (breakable != null) {
+                    breakable.TakeHit();
+                }
             }
         }
     }
@@ -295,9 +302,22 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Key used!");
     }
 
+    public void AddSword()
+    {
+        hasSword = true;
+        Debug.Log("Sword collected!");
+    }
+
+    public void RemoveSword()
+    {
+        hasSword = false;
+        Debug.Log("Sword used!");
+    }
+
     public void ReloadScene()
     {
         hasKey = false;
+        hasSword = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

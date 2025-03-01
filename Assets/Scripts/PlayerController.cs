@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 1f;
     public LayerMask breakableLayer;
 
+    private AudioSource attackAudioSource;
+
     [Header ("Open Gate")]
     public bool hasKey = false;
     public Gate gate; 
@@ -68,6 +70,7 @@ public class PlayerController : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
         polygonCollider = GetComponent<PolygonCollider2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        attackAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -258,6 +261,9 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
+
+        attackAudioSource.Play();
+
         // Determine attack direction based on the player's scale
         Vector2 attackDirection = playerSpriteRenderer.flipX ? Vector2.left : Vector2.right;
 

@@ -34,7 +34,7 @@ public class Box : MonoBehaviour
             ShuffleArray(boxes);
 
             // Assign items
-            boxes[0].hiddenObject = keyPrefab;
+            boxes[0].hiddenObject = keyPrefab;        
             boxes[1].hiddenObject = swordPrefab;
             boxes[2].hiddenObject = boxes[2].enemyObject;
             boxes[3].hiddenObject = boxes[3].enemyObject;
@@ -54,11 +54,16 @@ public class Box : MonoBehaviour
         // Reveal the manually assigned hidden object
         
         if (hiddenObject != null) {
-            if (hiddenObject == enemyObject) {
+            GameObject instantiatedObject = Instantiate(hiddenObject, transform.position, Quaternion.identity);
+            
+            if (hiddenObject == keyPrefab) {
+                Key keyScript = instantiatedObject.GetComponent<Key>();
+                // Call methods on Key script if necessary
+            } else if (hiddenObject == swordPrefab) {
+                Sword swordScript = instantiatedObject.GetComponent<Sword>();
+                // Call methods on Sword script if necessary
+            } else if (hiddenObject == enemyObject) {
                 ActivateEnemy();
-            }
-            else {
-                Instantiate(hiddenObject, transform.position, Quaternion.identity);
             }
         }
 

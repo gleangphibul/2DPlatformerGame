@@ -103,6 +103,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextSceneName: 
   winText: {fileID: 0}
+  sprites:
+  - {fileID: -1160010366554915182, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  - {fileID: 5853386924358050850, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  - {fileID: 4392103141360296039, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  - {fileID: -1678251164886203106, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  - {fileID: 378231322344738570, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  - {fileID: -4773631299378667110, guid: 0b26884c672065b4f963ef3f2860b21b, type: 3}
+  animationSpeed: 0.1
 --- !u!82 &5269335044395141874
 AudioSource:
   m_ObjectHideFlags: 0
@@ -113,9 +121,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: d1a5883f05dd86041a125fd4271c2921, type: 3}
+  m_Resource: {fileID: 8300000, guid: d1a5883f05dd86041a125fd4271c2921, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -33,5 +33,6 @@ public class Gate : MonoBehaviour
         Debug.Log("Gate Opened!");
         gateCollider.enabled = false; // Disable the collider so player can pass
         spriteRenderer.enabled = false; // Optional: Hide gate sprite
+        isNearGate = false;
     }
 }

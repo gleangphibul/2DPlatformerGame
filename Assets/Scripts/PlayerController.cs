@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     private float attackTimer = 0f;
     private int attackFrame = 0;
 
+    [Header("Dead Sprite")]
+    public Sprite deadSprite;
+
 
     [Header("Reload Scene")]
     public float fallLimit = -5;
@@ -94,6 +97,7 @@ public class PlayerController : MonoBehaviour
         if (hasKey && (gate.isNearGate == true) && Input.GetKeyDown(KeyCode.Space))
         {
             gate.OpenGate();
+            hasKey = false;
         }
     }
 
@@ -316,6 +320,7 @@ public class PlayerController : MonoBehaviour
 
     public void ReloadScene()
     {
+        playerSpriteRenderer.sprite = deadSprite;
         hasKey = false;
         hasSword = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

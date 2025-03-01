@@ -1,22 +1,37 @@
 fileFormatVersion: 2
-guid: 07d2dd79788b43347ac3b00958708a86
+guid: 616720b0f54aab340b639d44917f621e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6088342627132289551
-    second: MonedaD_0
+      213: -5094286353425474703
+    second: File_0
   - first:
-      213: -2359506160307568889
-    second: MonedaD_1
+      213: 6944993636166800022
+    second: File_1
   - first:
-      213: 4966363116081101388
-    second: MonedaD_2
+      213: -6475567878920213498
+    second: File_2
   - first:
-      213: -672162727369665448
-    second: MonedaD_3
+      213: -5655367976358485658
+    second: File_3
   - first:
-      213: 2361706786320140148
-    second: MonedaD_4
+      213: -8976271568068494015
+    second: File_4
+  - first:
+      213: -1136435792311686488
+    second: File_5
+  - first:
+      213: 5259279630547520280
+    second: File_6
+  - first:
+      213: -4423461354295232719
+    second: File_7
+  - first:
+      213: 2973196339833971244
+    second: File_8
+  - first:
+      213: -2028688851913010192
+    second: File_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 30
+  spritePixelsToUnits: 60
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -112,111 +127,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MonedaD_0
+      name: File_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
+        x: 160
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f02b619ac532e7450800000000000000
-      internalID: 6088342627132289551
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MonedaD_1
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 0
-        width: 12
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 70f758df5a9514fd0800000000000000
-      internalID: -2359506160307568889
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MonedaD_2
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 0
-        width: 8
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c4abd9fe0f01ce440800000000000000
-      internalID: 4966363116081101388
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MonedaD_3
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 0
-        width: 12
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8549fdb8f8ffba6f0800000000000000
-      internalID: -672162727369665448
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MonedaD_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 15
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 477cd3e2fc776c020800000000000000
-      internalID: 2361706786320140148
+      spriteID: 6616807f9c81481b0800000000000000
+      internalID: -5655367976358485658
       vertices: []
       indices: 
       edges: []
@@ -225,7 +152,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 86aef6663b90c9e48be89809eb70720c
     internalID: 0
     vertices: []
     indices: 
@@ -235,11 +162,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MonedaD_0: 6088342627132289551
-      MonedaD_1: -2359506160307568889
-      MonedaD_2: 4966363116081101388
-      MonedaD_3: -672162727369665448
-      MonedaD_4: 2361706786320140148
+      File_0: -5094286353425474703
+      File_1: 6944993636166800022
+      File_2: -6475567878920213498
+      File_3: -5655367976358485658
+      File_4: -8976271568068494015
+      File_5: -1136435792311686488
+      File_6: 5259279630547520280
+      File_7: -4423461354295232719
+      File_8: 2973196339833971244
+      File_9: -2028688851913010192
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

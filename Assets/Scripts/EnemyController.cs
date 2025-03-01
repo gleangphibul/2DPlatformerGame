@@ -8,11 +8,13 @@ public class EnemyController : MonoBehaviour
     private Transform currentPoint;
     public float speed;
     private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentPoint = pointB.transform;
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
     }
 
@@ -22,14 +24,17 @@ public class EnemyController : MonoBehaviour
         Vector2 point = currentPoint.position - transform.position;
         if (currentPoint == pointB.transform) {
             rb.linearVelocity = new Vector2(speed,0);
+            spriteRenderer.flipX = false;
         } else {
             rb.linearVelocity = new Vector2(-speed,0);
+            spriteRenderer.flipX = true;
         }
         if (Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointB.transform) {
             currentPoint = pointA.transform;
         }
         if (Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointA.transform) {
             currentPoint = pointB.transform;
+            
         }
     }
 

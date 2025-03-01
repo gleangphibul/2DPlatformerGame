@@ -57,6 +57,10 @@ public class PlayerController : MonoBehaviour
     [Header ("Open Gate")]
     public bool hasKey = false;
     public Gate gate; 
+
+    [Header ("Sword")]
+    public bool hasSword = false;
+    // public Gate gate; 
     
 
     private void Awake()
@@ -264,7 +268,7 @@ public class PlayerController : MonoBehaviour
 
         if (hit.collider != null)
         {
-            BreakableBox breakable = hit.collider.GetComponent<BreakableBox>();
+            Box breakable = hit.collider.GetComponent<Box>();
             if (breakable != null)
             {
                 breakable.TakeHit();
@@ -287,6 +291,7 @@ public class PlayerController : MonoBehaviour
 
     public void ReloadScene()
     {
+        hasKey = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

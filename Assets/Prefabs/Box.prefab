@@ -149,3 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hiddenObject: {fileID: 4712751011248748331, guid: 52a3f9ff03b21034eaa4c64fd65c8364, type: 3}
   breakEffect: {fileID: 0}
+  keyPrefab: {fileID: 3873016274077129252, guid: e08a6069d941845b09ee54fc959b68a6, type: 3}
+  swordPrefab: {fileID: 5179342755225789039, guid: c1763cfdb5d043040b59ecd4d1db746c, type: 3}
+  potionPrefab: {fileID: 9065673060650808696, guid: b5c30649175e39047876e5bea583c9df, type: 3}
+  enemyPrefab: {fileID: 658698340421800116, guid: 43ce8cb48a19fe742a465d71e12ca674, type: 3}

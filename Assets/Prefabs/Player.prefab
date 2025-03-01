@@ -139,7 +139,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   dashingPower: 5
-  tr: {fileID: 0}
   spriteLeft: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
   spriteLeftAlt: {fileID: 7085597507905639842, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
   spriteRight: {fileID: 9056928846778740707, guid: cc4ced082d0c2fd4297b9b85c4481f5a, type: 3}
@@ -156,6 +155,7 @@ MonoBehaviour:
     m_Bits: 256
   hasKey: 0
   gate: {fileID: 0}
+  hasSword: 0
 --- !u!114 &6015003608337641742
 MonoBehaviour:
   m_ObjectHideFlags: 0

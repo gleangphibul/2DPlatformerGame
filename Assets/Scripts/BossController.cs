@@ -1,7 +1,7 @@
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class BossController : MonoBehaviour
 {
     public GameObject pointA;
     public GameObject pointB;
@@ -9,11 +9,14 @@ public class EnemyController : MonoBehaviour
     public float speed;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    public PlayerController player;
+    public bool isNearBoss = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentPoint = pointB.transform;
         rb = GetComponent<Rigidbody2D>();
+        rb.isKinematic = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
         
     }
@@ -38,25 +41,17 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("Player"))
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.CompareTag("Player"))
         {
-            // Check if the player is above the enemy
-            if (transform.position.y < (other.transform.position.y-0.5)) {
-                // Kill the enemy
-                Die();
-            } else {
-                // Player dies if they touch the enemy from the side
-                PlayerController player = other.GetComponent<PlayerController>();
-                if (player != null) {
-                    player.ReloadScene();
-                }
-            }
+            isNearBoss = true;
+            Debug.Log("Near boss");
         }
     }
-
+    
     public void Die()
     {
+        Debug.Log("Boss die");
         Destroy(gameObject); // Destroy the enemy
     }
 }

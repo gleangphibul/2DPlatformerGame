@@ -158,6 +158,7 @@ MonoBehaviour:
   hasKey: 0
   gate: {fileID: 868223388943478034, guid: 385e0f0a26ca8c64f95cd08894224779, type: 3}
   hasSword: 0
+  boss: {fileID: 0}
 --- !u!114 &6015003608337641742
 MonoBehaviour:
   m_ObjectHideFlags: 0

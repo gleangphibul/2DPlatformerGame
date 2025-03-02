@@ -65,6 +65,9 @@ public class PlayerController : MonoBehaviour
 
     [Header ("Sword")]
     public bool hasSword = false;
+    public BossController boss; 
+
+
 
     private void Awake()
     {
@@ -98,6 +101,11 @@ public class PlayerController : MonoBehaviour
         {
             gate.OpenGate();
             hasKey = false;
+        }
+        if (hasSword && (boss.isNearBoss == true) && Input.GetKeyDown(KeyCode.Space))
+        {
+            boss.Die();
+            hasSword = false;
         }
     }
 
@@ -277,14 +285,7 @@ public class PlayerController : MonoBehaviour
         if (hit.collider != null)
         {
             GameObject hitObject = hit.collider.gameObject;
-            if (hasSword && hitObject.CompareTag("FinalBoss")) {
-                // Deal damage to the Final Boss
-                EnemyController boss = hitObject.GetComponent<EnemyController>();
-                boss.Die();
-            } else if (hitObject.CompareTag("Enemy")) {
-                EnemyController enemy = hitObject.GetComponent<EnemyController>();
-                enemy.Die();
-            } else {
+            if (hitObject.CompareTag("Box")) {
                 Box breakable = hit.collider.GetComponent<Box>();
                 if (breakable != null) {
                     breakable.TakeHit();
@@ -310,12 +311,6 @@ public class PlayerController : MonoBehaviour
     {
         hasSword = true;
         Debug.Log("Sword collected!");
-    }
-
-    public void RemoveSword()
-    {
-        hasSword = false;
-        Debug.Log("Sword used!");
     }
 
     public void ReloadScene()
